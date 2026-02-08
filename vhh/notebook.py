@@ -48,7 +48,6 @@ def _():
         jablang,
         jax,
         molviewspec,
-        np,
         plt,
         simplex_APGM,
         sp,
@@ -145,7 +144,7 @@ def _(
 
     pred, _viewer = predict(scaffold_PSSM, fold_features, fold_writer)
     _viewer
-    return fold_features, fold_writer, pred, predict
+    return fold_features, fold_writer, pred, predict, scaffold_PSSM
 
 
 @app.cell
@@ -165,13 +164,11 @@ def _(ablang):
 @app.cell
 def _(
     AbLangPseudoLikelihood,
-    binder_length,
     fold_features,
     fold_model,
     heavy_ablang,
     jablang,
-    jax,
-    np,
+    scaffold_PSSM,
     simplex_APGM,
     sp,
 ):
@@ -184,7 +181,6 @@ def _(
     structure_loss = fold_model.build_loss(
         loss=2 * sp.BinderTargetContact()
         + sp.WithinBinderContact(),
-        # + 5.0 * InverseFoldingSequenceRecovery(mpnn, temp=jax.numpy.array(0.01)),
         features=fold_features,
     )
     loss = 25.0 * ab_log_likelihood + structure_loss
@@ -193,12 +189,13 @@ def _(
     _, PSSM = simplex_APGM(
         loss_function=loss,
         n_steps=75,
-        x=jax.nn.softmax(
-            0.5*jax.random.gumbel(
-                key=jax.random.key(np.random.randint(100000)),
-                shape=(binder_length, 20),
-            )
-        ),
+        x=scaffold_PSSM,
+        # x=jax.nn.softmax(
+        #     0.5*jax.random.gumbel(
+        #         key=jax.random.key(np.random.randint(100000)),
+        #         shape=(binder_length, 20),
+        #     )
+        # ),
         stepsize=0.1,
         momentum=0.0,
     )

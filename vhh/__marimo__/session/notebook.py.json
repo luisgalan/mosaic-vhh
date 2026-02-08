@@ -1,0 +1,222 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.19.4"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "325483825a85ff300384575bee1104d3",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "22e5a171b00c5b4e73fdb8fc3d68cefb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "0b07222cb0a5b39aa6d6379d3dacecb3",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "interruption",
+          "evalue": "This cell was interrupted and needs to be re-run",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/pytorch_lightning/utilities/migration/utils.py:56: The loaded checkpoint was produced with Lightning v2.5.0.post0, which is newer than your current Lightning version: v2.5.0\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_38758/__marimo__cell_vblA_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">fold_model</span> <span class=\"o\">=</span> <span class=\"n\">Boltz2</span><span class=\"p\">()</span>\n<span class=\"w\">                 </span><span class=\"pm\">^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/equinox/_module/_module.py&quot;</span>, line <span class=\"m\">414</span>, in <span class=\"n\">__call__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span> <span class=\"o\">=</span> <span class=\"nb\">super</span><span class=\"p\">()</span><span class=\"o\">.</span><span class=\"fm\">__call__</span><span class=\"p\">(</span><span class=\"o\">*</span><span class=\"n\">args</span><span class=\"p\">,</span> <span class=\"o\">**</span><span class=\"n\">kwargs</span><span class=\"p\">)</span>  <span class=\"c1\"># pyright: ignore[reportAttributeAccessIssue]</span>\n<span class=\"w\">           </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/equinox/_module/_better_abstract.py&quot;</span>, line <span class=\"m\">233</span>, in <span class=\"n\">__call__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span> <span class=\"o\">=</span> <span class=\"nb\">super</span><span class=\"p\">()</span><span class=\"o\">.</span><span class=\"fm\">__call__</span><span class=\"p\">(</span><span class=\"o\">*</span><span class=\"n\">args</span><span class=\"p\">,</span> <span class=\"o\">**</span><span class=\"n\">kwargs</span><span class=\"p\">)</span>\n<span class=\"w\">           </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/src/mosaic/models/boltz2.py&quot;</span>, line <span class=\"m\">122</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">model</span> <span class=\"o\">=</span> <span class=\"n\">lb</span><span class=\"p\">(</span><span class=\"n\">cache_path</span><span class=\"p\">)</span> <span class=\"k\">if</span> <span class=\"n\">cache_path</span> <span class=\"ow\">is</span> <span class=\"ow\">not</span> <span class=\"kc\">None</span> <span class=\"k\">else</span> <span class=\"n\">lb</span><span class=\"p\">()</span>\n<span class=\"w\">                                                               </span><span class=\"pm\">^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/src/mosaic/losses/boltz2.py&quot;</span>, line <span class=\"m\">32</span>, in <span class=\"n\">load_boltz2</span>\n<span class=\"w\">    </span><span class=\"n\">torch_model</span> <span class=\"o\">=</span> <span class=\"n\">Boltz2</span><span class=\"o\">.</span><span class=\"n\">load_from_checkpoint</span><span class=\"p\">(</span>\n<span class=\"w\">                  </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/pytorch_lightning/utilities/model_helpers.py&quot;</span>, line <span class=\"m\">125</span>, in <span class=\"n\">wrapper</span>\n<span class=\"w\">    </span><span class=\"k\">return</span> <span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">method</span><span class=\"p\">(</span><span class=\"bp\">cls</span><span class=\"p\">,</span> <span class=\"o\">*</span><span class=\"n\">args</span><span class=\"p\">,</span> <span class=\"o\">**</span><span class=\"n\">kwargs</span><span class=\"p\">)</span>\n<span class=\"w\">           </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/pytorch_lightning/core/module.py&quot;</span>, line <span class=\"m\">1581</span>, in <span class=\"n\">load_from_checkpoint</span>\n<span class=\"w\">    </span><span class=\"n\">loaded</span> <span class=\"o\">=</span> <span class=\"n\">_load_from_checkpoint</span><span class=\"p\">(</span>\n<span class=\"w\">             </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/pytorch_lightning/core/saving.py&quot;</span>, line <span class=\"m\">91</span>, in <span class=\"n\">_load_from_checkpoint</span>\n<span class=\"w\">    </span><span class=\"n\">model</span> <span class=\"o\">=</span> <span class=\"n\">_load_state</span><span class=\"p\">(</span><span class=\"bp\">cls</span><span class=\"p\">,</span> <span class=\"n\">checkpoint</span><span class=\"p\">,</span> <span class=\"n\">strict</span><span class=\"o\">=</span><span class=\"n\">strict</span><span class=\"p\">,</span> <span class=\"o\">**</span><span class=\"n\">kwargs</span><span class=\"p\">)</span>\n<span class=\"w\">            </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/pytorch_lightning/core/saving.py&quot;</span>, line <span class=\"m\">165</span>, in <span class=\"n\">_load_state</span>\n<span class=\"w\">    </span><span class=\"n\">obj</span> <span class=\"o\">=</span> <span class=\"n\">instantiator</span><span class=\"p\">(</span><span class=\"bp\">cls</span><span class=\"p\">,</span> <span class=\"n\">_cls_kwargs</span><span class=\"p\">)</span> <span class=\"k\">if</span> <span class=\"n\">instantiator</span> <span class=\"k\">else</span> <span class=\"bp\">cls</span><span class=\"p\">(</span><span class=\"o\">**</span><span class=\"n\">_cls_kwargs</span><span class=\"p\">)</span>\n<span class=\"w\">                                                              </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/models/boltz2.py&quot;</span>, line <span class=\"m\">305</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">confidence_module</span> <span class=\"o\">=</span> <span class=\"n\">ConfidenceModule</span><span class=\"p\">(</span>\n<span class=\"w\">                             </span><span class=\"pm\">^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/modules/confidencev2.py&quot;</span>, line <span class=\"m\">95</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">pairformer_stack</span> <span class=\"o\">=</span> <span class=\"n\">PairformerModule</span><span class=\"p\">(</span>\n<span class=\"w\">                            </span><span class=\"pm\">^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/layers/pairformer.py&quot;</span>, line <span class=\"m\">144</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"n\">PairformerLayer</span><span class=\"p\">(</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/layers/pairformer.py&quot;</span>, line <span class=\"m\">57</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">transition_s</span> <span class=\"o\">=</span> <span class=\"n\">Transition</span><span class=\"p\">(</span><span class=\"n\">token_s</span><span class=\"p\">,</span> <span class=\"n\">token_s</span> <span class=\"o\">*</span> <span class=\"mi\">4</span><span class=\"p\">)</span>\n<span class=\"w\">                        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/layers/transition.py&quot;</span>, line <span class=\"m\">44</span>, in <span class=\"n\">__init__</span>\n<span class=\"w\">    </span><span class=\"n\">init</span><span class=\"o\">.</span><span class=\"n\">lecun_normal_init_</span><span class=\"p\">(</span><span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">fc2</span><span class=\"o\">.</span><span class=\"n\">weight</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/layers/initialize.py&quot;</span>, line <span class=\"m\">62</span>, in <span class=\"n\">lecun_normal_init_</span>\n<span class=\"w\">    </span><span class=\"n\">trunc_normal_init_</span><span class=\"p\">(</span><span class=\"n\">weights</span><span class=\"p\">,</span> <span class=\"n\">scale</span><span class=\"o\">=</span><span class=\"mf\">1.0</span><span class=\"p\">)</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/boltz/model/layers/initialize.py&quot;</span>, line <span class=\"m\">58</span>, in <span class=\"n\">trunc_normal_init_</span>\n<span class=\"w\">    </span><span class=\"n\">weights</span><span class=\"o\">.</span><span class=\"n\">copy_</span><span class=\"p\">(</span><span class=\"n\">torch</span><span class=\"o\">.</span><span class=\"n\">tensor</span><span class=\"p\">(</span><span class=\"n\">samples</span><span class=\"p\">,</span> <span class=\"n\">device</span><span class=\"o\">=</span><span class=\"n\">weights</span><span class=\"o\">.</span><span class=\"n\">device</span><span class=\"p\">))</span>\n<span class=\"w\">                  </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/marimo/_runtime/handlers.py&quot;</span>, line <span class=\"m\">49</span>, in <span class=\"n\">interrupt_handler</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"n\">MarimoInterrupt</span>\n<span class=\"gr\">KeyboardInterrupt</span>\n</pre></div>\n</span>",
+          "mimetype": "application/vnd.marimo+traceback"
+        }
+      ]
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "f8f9b0fed7852fe550bc71a7cc3ad094",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Loading data\nChecking input data.\nProcessing 1 inputs with 1 threads.\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\r  0%|                                                                                                                                                      | 0/1 [00:00<?, ?it/s]",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Found explicit empty MSA for some proteins, will run these in single sequence mode. Keep in mind that the model predictions will be suboptimal without an MSA.\nGenerating MSA for /tmp/tmpkq5ff4y9/input.yaml with 1 protein entities.\nCalling MSA server for target input with 1 sequences\nMSA server URL: https://api.colabfold.com\nMSA pairing strategy: greedy\nNo authentication provided for MSA server\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\n\r  0%|                                                                                                                                       | 0/150 [elapsed: 00:00 remaining: ?]\u001b[A\n\rSUBMIT:   0%|                                                                                                                               | 0/150 [elapsed: 00:00 remaining: ?]\u001b[A\n\rCOMPLETE:   0%|                                                                                                                             | 0/150 [elapsed: 00:00 remaining: ?]\u001b[A\n\rCOMPLETE: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 150/150 [elapsed: 00:00 remaining: 00:00]\u001b[A\rCOMPLETE: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 150/150 [elapsed: 00:01 remaining: 00:00]\n\r100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.76s/it]\r100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.76s/it]\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Something odd happened with manifest, trying to reload.\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "/home/luis/python/mosaic/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py:665: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.\n  warnings.warn(warn_msg)\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "n_msa 104\nJIT compiling structure module...\nJIT compiling trunk module...\nJIT compiling confidence module...\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "ad2e1b678b1cfb457421c21de4f930f7",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "9d52b7146470d78fa78683fec74ecd64",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "interruption",
+          "evalue": "This cell was interrupted and needs to be re-run",
+          "traceback": []
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "7f103e592418a51bc30f85a8cfb93caf",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Making loss function...\nStarting optimizer\nn_msa 104\nJIT compiling trunk module...\n0 loss: 47.21 .0.ablang_pll:-1.40 .1.boltz2.0.target_contact:-5.06 .1.boltz2.1.intra_contact:-2.12 loss: 47.21 nnz: 1.14 time: 45.18\n1 loss: 46.82 .0.ablang_pll:-1.38 .1.boltz2.0.target_contact:-5.07 .1.boltz2.1.intra_contact:-2.11 loss: 46.82 nnz: 1.25 time: 3.19\n2 loss: 46.44 .0.ablang_pll:-1.37 .1.boltz2.0.target_contact:-5.07 .1.boltz2.1.intra_contact:-2.10 loss: 46.44 nnz: 1.33 time: 3.13\n3 loss: 46.06 .0.ablang_pll:-1.35 .1.boltz2.0.target_contact:-5.07 .1.boltz2.1.intra_contact:-2.09 loss: 46.06 nnz: 1.37 time: 3.15\n4 loss: 45.66 .0.ablang_pll:-1.34 .1.boltz2.0.target_contact:-5.07 .1.boltz2.1.intra_contact:-2.09 loss: 45.66 nnz: 1.44 time: 3.15\n5 loss: 45.24 .0.ablang_pll:-1.32 .1.boltz2.0.target_contact:-5.07 .1.boltz2.1.intra_contact:-2.08 loss: 45.24 nnz: 1.45 time: 3.16\n6 loss: 44.79 .0.ablang_pll:-1.30 .1.boltz2.0.target_contact:-5.06 .1.boltz2.1.intra_contact:-2.08 loss: 44.79 nnz: 1.49 time: 3.13\n7 loss: 44.32 .0.ablang_pll:-1.29 .1.boltz2.0.target_contact:-5.03 .1.boltz2.1.intra_contact:-2.08 loss: 44.32 nnz: 1.50 time: 3.18\n8 loss: 43.86 .0.ablang_pll:-1.27 .1.boltz2.0.target_contact:-5.02 .1.boltz2.1.intra_contact:-2.07 loss: 43.86 nnz: 1.50 time: 3.17\n9 loss: 43.36 .0.ablang_pll:-1.25 .1.boltz2.0.target_contact:-4.99 .1.boltz2.1.intra_contact:-2.07 loss: 43.36 nnz: 1.52 time: 2.64\n10 loss: 42.71 .0.ablang_pll:-1.23 .1.boltz2.0.target_contact:-4.90 .1.boltz2.1.intra_contact:-2.07 loss: 42.71 nnz: 1.53 time: 2.56\n11 loss: 42.13 .0.ablang_pll:-1.21 .1.boltz2.0.target_contact:-4.86 .1.boltz2.1.intra_contact:-2.06 loss: 42.13 nnz: 1.53 time: 3.16\n12 loss: 41.69 .0.ablang_pll:-1.20 .1.boltz2.0.target_contact:-4.84 .1.boltz2.1.intra_contact:-2.06 loss: 41.69 nnz: 1.55 time: 3.16\n13 loss: 41.27 .0.ablang_pll:-1.18 .1.boltz2.0.target_contact:-4.84 .1.boltz2.1.intra_contact:-2.06 loss: 41.27 nnz: 1.54 time: 3.18\n14 loss: 40.86 .0.ablang_pll:-1.17 .1.boltz2.0.target_contact:-4.83 .1.boltz2.1.intra_contact:-2.06 loss: 40.86 nnz: 1.54 time: 2.74\n15 loss: 40.46 .0.ablang_pll:-1.15 .1.boltz2.0.target_contact:-4.83 .1.boltz2.1.intra_contact:-2.05 loss: 40.46 nnz: 1.54 time: 2.70\n16 loss: 40.06 .0.ablang_pll:-1.13 .1.boltz2.0.target_contact:-4.82 .1.boltz2.1.intra_contact:-2.05 loss: 40.06 nnz: 1.54 time: 2.85\n17 loss: 39.64 .0.ablang_pll:-1.12 .1.boltz2.0.target_contact:-4.81 .1.boltz2.1.intra_contact:-2.05 loss: 39.64 nnz: 1.55 time: 3.20\n18 loss: 39.21 .0.ablang_pll:-1.10 .1.boltz2.0.target_contact:-4.81 .1.boltz2.1.intra_contact:-2.05 loss: 39.21 nnz: 1.56 time: 3.17\n19 loss: 38.77 .0.ablang_pll:-1.08 .1.boltz2.0.target_contact:-4.80 .1.boltz2.1.intra_contact:-2.05 loss: 38.77 nnz: 1.56 time: 3.17\n20 loss: 38.29 .0.ablang_pll:-1.07 .1.boltz2.0.target_contact:-4.78 .1.boltz2.1.intra_contact:-2.06 loss: 38.29 nnz: 1.56 time: 2.71\n21 loss: 37.81 .0.ablang_pll:-1.05 .1.boltz2.0.target_contact:-4.76 .1.boltz2.1.intra_contact:-2.06 loss: 37.81 nnz: 1.56 time: 3.03\n22 loss: 37.35 .0.ablang_pll:-1.03 .1.boltz2.0.target_contact:-4.75 .1.boltz2.1.intra_contact:-2.06 loss: 37.35 nnz: 1.54 time: 2.73\n23 loss: 36.93 .0.ablang_pll:-1.02 .1.boltz2.0.target_contact:-4.73 .1.boltz2.1.intra_contact:-2.05 loss: 36.93 nnz: 1.53 time: 2.73\n24 loss: 36.50 .0.ablang_pll:-1.00 .1.boltz2.0.target_contact:-4.72 .1.boltz2.1.intra_contact:-2.05 loss: 36.50 nnz: 1.53 time: 2.84\n25 loss: 36.07 .0.ablang_pll:-0.98 .1.boltz2.0.target_contact:-4.71 .1.boltz2.1.intra_contact:-2.05 loss: 36.07 nnz: 1.52 time: 2.63\n26 loss: 35.67 .0.ablang_pll:-0.97 .1.boltz2.0.target_contact:-4.72 .1.boltz2.1.intra_contact:-2.06 loss: 35.67 nnz: 1.50 time: 2.66\n27 loss: 35.32 .0.ablang_pll:-0.95 .1.boltz2.0.target_contact:-4.72 .1.boltz2.1.intra_contact:-2.05 loss: 35.32 nnz: 1.51 time: 2.68\n28 loss: 34.90 .0.ablang_pll:-0.93 .1.boltz2.0.target_contact:-4.73 .1.boltz2.1.intra_contact:-2.08 loss: 34.90 nnz: 1.50 time: 2.92\n29 loss: 34.57 .0.ablang_pll:-0.92 .1.boltz2.0.target_contact:-4.72 .1.boltz2.1.intra_contact:-2.07 loss: 34.57 nnz: 1.49 time: 3.05\n30 loss: 34.04 .0.ablang_pll:-0.90 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.08 loss: 34.04 nnz: 1.47 time: 2.80\n31 loss: 33.66 .0.ablang_pll:-0.89 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.10 loss: 33.66 nnz: 1.48 time: 3.16\n32 loss: 33.32 .0.ablang_pll:-0.87 .1.boltz2.0.target_contact:-4.69 .1.boltz2.1.intra_contact:-2.07 loss: 33.32 nnz: 1.49 time: 2.80\n33 loss: 32.97 .0.ablang_pll:-0.86 .1.boltz2.0.target_contact:-4.67 .1.boltz2.1.intra_contact:-2.09 loss: 32.97 nnz: 1.48 time: 2.79\n34 loss: 32.64 .0.ablang_pll:-0.85 .1.boltz2.0.target_contact:-4.67 .1.boltz2.1.intra_contact:-2.06 loss: 32.64 nnz: 1.47 time: 2.55\n35 loss: 32.14 .0.ablang_pll:-0.83 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 32.14 nnz: 1.50 time: 2.78\n36 loss: 31.79 .0.ablang_pll:-0.82 .1.boltz2.0.target_contact:-4.58 .1.boltz2.1.intra_contact:-2.09 loss: 31.79 nnz: 1.47 time: 3.14\n37 loss: 31.45 .0.ablang_pll:-0.80 .1.boltz2.0.target_contact:-4.64 .1.boltz2.1.intra_contact:-2.08 loss: 31.45 nnz: 1.49 time: 3.12\n38 loss: 31.10 .0.ablang_pll:-0.79 .1.boltz2.0.target_contact:-4.57 .1.boltz2.1.intra_contact:-2.09 loss: 31.10 nnz: 1.47 time: 3.12\n39 loss: 30.76 .0.ablang_pll:-0.78 .1.boltz2.0.target_contact:-4.60 .1.boltz2.1.intra_contact:-2.09 loss: 30.76 nnz: 1.47 time: 3.08\n40 loss: 30.47 .0.ablang_pll:-0.77 .1.boltz2.0.target_contact:-4.55 .1.boltz2.1.intra_contact:-2.09 loss: 30.47 nnz: 1.44 time: 2.97\n41 loss: 30.23 .0.ablang_pll:-0.76 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 30.23 nnz: 1.44 time: 2.90\n42 loss: 30.00 .0.ablang_pll:-0.75 .1.boltz2.0.target_contact:-4.55 .1.boltz2.1.intra_contact:-2.08 loss: 30.00 nnz: 1.44 time: 3.02\n43 loss: 29.81 .0.ablang_pll:-0.74 .1.boltz2.0.target_contact:-4.57 .1.boltz2.1.intra_contact:-2.09 loss: 29.81 nnz: 1.43 time: 3.21\n44 loss: 29.64 .0.ablang_pll:-0.74 .1.boltz2.0.target_contact:-4.54 .1.boltz2.1.intra_contact:-2.08 loss: 29.64 nnz: 1.40 time: 3.14\n45 loss: 29.49 .0.ablang_pll:-0.73 .1.boltz2.0.target_contact:-4.56 .1.boltz2.1.intra_contact:-2.09 loss: 29.49 nnz: 1.39 time: 2.91\n46 loss: 29.39 .0.ablang_pll:-0.73 .1.boltz2.0.target_contact:-4.55 .1.boltz2.1.intra_contact:-2.08 loss: 29.39 nnz: 1.40 time: 3.21\n47 loss: 29.32 .0.ablang_pll:-0.72 .1.boltz2.0.target_contact:-4.56 .1.boltz2.1.intra_contact:-2.09 loss: 29.32 nnz: 1.40 time: 3.20\n48 loss: 29.22 .0.ablang_pll:-0.72 .1.boltz2.0.target_contact:-4.56 .1.boltz2.1.intra_contact:-2.08 loss: 29.22 nnz: 1.39 time: 3.16\n49 loss: 29.12 .0.ablang_pll:-0.72 .1.boltz2.0.target_contact:-4.56 .1.boltz2.1.intra_contact:-2.08 loss: 29.12 nnz: 1.39 time: 3.15\n50 loss: 29.00 .0.ablang_pll:-0.71 .1.boltz2.0.target_contact:-4.57 .1.boltz2.1.intra_contact:-2.08 loss: 29.00 nnz: 1.40 time: 3.21\n51 loss: 28.86 .0.ablang_pll:-0.71 .1.boltz2.0.target_contact:-4.57 .1.boltz2.1.intra_contact:-2.08 loss: 28.86 nnz: 1.41 time: 3.19\n52 loss: 28.70 .0.ablang_pll:-0.70 .1.boltz2.0.target_contact:-4.58 .1.boltz2.1.intra_contact:-2.09 loss: 28.70 nnz: 1.40 time: 3.15\n53 loss: 28.51 .0.ablang_pll:-0.69 .1.boltz2.0.target_contact:-4.59 .1.boltz2.1.intra_contact:-2.08 loss: 28.51 nnz: 1.40 time: 3.19\n54 loss: 28.32 .0.ablang_pll:-0.68 .1.boltz2.0.target_contact:-4.59 .1.boltz2.1.intra_contact:-2.09 loss: 28.32 nnz: 1.40 time: 3.17\n55 loss: 28.11 .0.ablang_pll:-0.67 .1.boltz2.0.target_contact:-4.60 .1.boltz2.1.intra_contact:-2.09 loss: 28.11 nnz: 1.37 time: 3.19\n56 loss: 27.91 .0.ablang_pll:-0.66 .1.boltz2.0.target_contact:-4.60 .1.boltz2.1.intra_contact:-2.09 loss: 27.91 nnz: 1.37 time: 3.21\n57 loss: 27.70 .0.ablang_pll:-0.66 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 27.70 nnz: 1.36 time: 3.19\n58 loss: 27.49 .0.ablang_pll:-0.65 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 27.49 nnz: 1.35 time: 3.19\n59 loss: 27.27 .0.ablang_pll:-0.64 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 27.27 nnz: 1.35 time: 3.15\n60 loss: 27.09 .0.ablang_pll:-0.63 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 27.09 nnz: 1.34 time: 3.18\n61 loss: 26.89 .0.ablang_pll:-0.62 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 26.89 nnz: 1.34 time: 3.16\n62 loss: 26.71 .0.ablang_pll:-0.62 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 26.71 nnz: 1.32 time: 3.20\n63 loss: 26.54 .0.ablang_pll:-0.61 .1.boltz2.0.target_contact:-4.61 .1.boltz2.1.intra_contact:-2.09 loss: 26.54 nnz: 1.32 time: 3.20\n64 loss: 26.40 .0.ablang_pll:-0.60 .1.boltz2.0.target_contact:-4.62 .1.boltz2.1.intra_contact:-2.09 loss: 26.40 nnz: 1.31 time: 3.22\n65 loss: 26.31 .0.ablang_pll:-0.60 .1.boltz2.0.target_contact:-4.63 .1.boltz2.1.intra_contact:-2.09 loss: 26.31 nnz: 1.31 time: 3.21\n66 loss: 26.27 .0.ablang_pll:-0.60 .1.boltz2.0.target_contact:-4.64 .1.boltz2.1.intra_contact:-2.09 loss: 26.27 nnz: 1.31 time: 3.20\n67 loss: 26.24 .0.ablang_pll:-0.59 .1.boltz2.0.target_contact:-4.65 .1.boltz2.1.intra_contact:-2.09 loss: 26.24 nnz: 1.32 time: 3.20\n68 loss: 26.20 .0.ablang_pll:-0.59 .1.boltz2.0.target_contact:-4.66 .1.boltz2.1.intra_contact:-2.09 loss: 26.20 nnz: 1.33 time: 3.18\n69 loss: 26.12 .0.ablang_pll:-0.59 .1.boltz2.0.target_contact:-4.67 .1.boltz2.1.intra_contact:-2.09 loss: 26.12 nnz: 1.34 time: 3.21\n70 loss: 26.00 .0.ablang_pll:-0.58 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.09 loss: 26.00 nnz: 1.34 time: 3.23\n71 loss: 25.84 .0.ablang_pll:-0.58 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.09 loss: 25.84 nnz: 1.34 time: 3.20\n72 loss: 25.64 .0.ablang_pll:-0.57 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.09 loss: 25.64 nnz: 1.32 time: 3.19\n73 loss: 25.41 .0.ablang_pll:-0.56 .1.boltz2.0.target_contact:-4.67 .1.boltz2.1.intra_contact:-2.09 loss: 25.41 nnz: 1.31 time: 3.21\n74 loss: 25.24 .0.ablang_pll:-0.55 .1.boltz2.0.target_contact:-4.67 .1.boltz2.1.intra_contact:-2.09 loss: 25.24 nnz: 1.31 time: 3.19\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "8e4db0ca591327ce4547516eb9168df7",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Predicting structure...\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "dcd9dd6504935e93badf9ea9f239cfb9",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Starting optimizer...\n0 loss: 25.08 .0.ablang_pll:-0.55 .1.boltz2.0.target_contact:-4.68 .1.boltz2.1.intra_contact:-2.09 loss: 25.08 nnz: 1.13 time: 3.22\n1 loss: 23.70 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.80 .1.boltz2.1.intra_contact:-2.10 loss: 23.70 nnz: 1.08 time: 2.95\n2 loss: 23.05 .0.ablang_pll:-0.50 .1.boltz2.0.target_contact:-4.21 .1.boltz2.1.intra_contact:-2.08 loss: 23.05 nnz: 1.05 time: 2.96\n3 loss: 22.37 .0.ablang_pll:-0.46 .1.boltz2.0.target_contact:-4.38 .1.boltz2.1.intra_contact:-2.09 loss: 22.37 nnz: 1.03 time: 2.87\n4 loss: 23.55 .0.ablang_pll:-0.52 .1.boltz2.0.target_contact:-4.24 .1.boltz2.1.intra_contact:-2.08 loss: 23.55 nnz: 1.04 time: 2.82\n5 loss: 23.07 .0.ablang_pll:-0.50 .1.boltz2.0.target_contact:-4.20 .1.boltz2.1.intra_contact:-2.08 loss: 23.07 nnz: 1.03 time: 2.86\n6 loss: 22.60 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.21 .1.boltz2.1.intra_contact:-2.08 loss: 22.60 nnz: 1.02 time: 2.68\n7 loss: 22.24 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.21 .1.boltz2.1.intra_contact:-2.09 loss: 22.24 nnz: 1.02 time: 2.78\n8 loss: 22.24 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.44 .1.boltz2.1.intra_contact:-2.10 loss: 22.24 nnz: 1.02 time: 2.83\n9 loss: 23.41 .0.ablang_pll:-0.51 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.08 loss: 23.41 nnz: 1.02 time: 3.16\n10 loss: 23.00 .0.ablang_pll:-0.50 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.08 loss: 23.00 nnz: 1.02 time: 3.15\n11 loss: 22.60 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.28 .1.boltz2.1.intra_contact:-2.09 loss: 22.60 nnz: 1.02 time: 2.87\n12 loss: 22.27 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.26 .1.boltz2.1.intra_contact:-2.09 loss: 22.27 nnz: 1.02 time: 3.14\n13 loss: 21.87 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.24 .1.boltz2.1.intra_contact:-2.09 loss: 21.87 nnz: 1.02 time: 3.15\n14 loss: 21.88 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.24 .1.boltz2.1.intra_contact:-2.09 loss: 21.88 nnz: 1.02 time: 3.13\n15 loss: 21.87 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 21.87 nnz: 1.02 time: 3.13\n16 loss: 22.06 .0.ablang_pll:-0.46 .1.boltz2.0.target_contact:-4.24 .1.boltz2.1.intra_contact:-2.09 loss: 22.06 nnz: 1.02 time: 3.10\n17 loss: 22.10 .0.ablang_pll:-0.44 .1.boltz2.0.target_contact:-4.46 .1.boltz2.1.intra_contact:-2.11 loss: 22.10 nnz: 1.01 time: 3.12\n18 loss: 23.34 .0.ablang_pll:-0.51 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 23.34 nnz: 1.02 time: 3.15\n19 loss: 23.07 .0.ablang_pll:-0.50 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 23.07 nnz: 1.02 time: 3.15\n20 loss: 22.67 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.29 .1.boltz2.1.intra_contact:-2.10 loss: 22.67 nnz: 1.02 time: 3.11\n21 loss: 22.50 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.33 .1.boltz2.1.intra_contact:-2.10 loss: 22.50 nnz: 1.02 time: 2.96\n22 loss: 22.37 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 22.37 nnz: 1.02 time: 3.13\n23 loss: 22.05 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.05 nnz: 1.02 time: 3.10\n24 loss: 21.97 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.34 .1.boltz2.1.intra_contact:-2.10 loss: 21.97 nnz: 1.01 time: 3.10\n25 loss: 22.86 .0.ablang_pll:-0.49 .1.boltz2.0.target_contact:-4.29 .1.boltz2.1.intra_contact:-2.10 loss: 22.86 nnz: 1.02 time: 3.04\n26 loss: 22.67 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.33 .1.boltz2.1.intra_contact:-2.10 loss: 22.67 nnz: 1.02 time: 3.15\n27 loss: 22.61 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.30 .1.boltz2.1.intra_contact:-2.10 loss: 22.61 nnz: 1.02 time: 3.12\n28 loss: 22.47 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.32 .1.boltz2.1.intra_contact:-2.10 loss: 22.47 nnz: 1.02 time: 3.11\n29 loss: 22.32 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.28 .1.boltz2.1.intra_contact:-2.10 loss: 22.32 nnz: 1.02 time: 3.15\n30 loss: 22.01 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.01 nnz: 1.02 time: 3.15\n31 loss: 22.03 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.38 .1.boltz2.1.intra_contact:-2.10 loss: 22.03 nnz: 1.01 time: 3.14\n32 loss: 23.00 .0.ablang_pll:-0.49 .1.boltz2.0.target_contact:-4.28 .1.boltz2.1.intra_contact:-2.10 loss: 23.00 nnz: 1.02 time: 3.15\n33 loss: 22.68 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.68 nnz: 1.02 time: 3.15\n34 loss: 22.59 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.33 .1.boltz2.1.intra_contact:-2.10 loss: 22.59 nnz: 1.02 time: 3.15\n35 loss: 22.50 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.29 .1.boltz2.1.intra_contact:-2.10 loss: 22.50 nnz: 1.02 time: 3.16\n36 loss: 22.31 .0.ablang_pll:-0.46 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.31 nnz: 1.02 time: 3.13\n37 loss: 22.04 .0.ablang_pll:-0.46 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 22.04 nnz: 1.02 time: 3.12\n38 loss: 22.09 .0.ablang_pll:-0.44 .1.boltz2.0.target_contact:-4.45 .1.boltz2.1.intra_contact:-2.11 loss: 22.09 nnz: 1.01 time: 3.10\n39 loss: 23.30 .0.ablang_pll:-0.51 .1.boltz2.0.target_contact:-4.27 .1.boltz2.1.intra_contact:-2.10 loss: 23.30 nnz: 1.02 time: 3.12\n40 loss: 22.99 .0.ablang_pll:-0.49 .1.boltz2.0.target_contact:-4.28 .1.boltz2.1.intra_contact:-2.10 loss: 22.99 nnz: 1.02 time: 3.10\n41 loss: 22.62 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.30 .1.boltz2.1.intra_contact:-2.10 loss: 22.62 nnz: 1.02 time: 3.11\n42 loss: 22.49 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.32 .1.boltz2.1.intra_contact:-2.10 loss: 22.49 nnz: 1.02 time: 3.14\n43 loss: 22.35 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.28 .1.boltz2.1.intra_contact:-2.10 loss: 22.35 nnz: 1.02 time: 3.14\n44 loss: 22.04 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.04 nnz: 1.02 time: 3.14\n45 loss: 21.98 .0.ablang_pll:-0.45 .1.boltz2.0.target_contact:-4.35 .1.boltz2.1.intra_contact:-2.10 loss: 21.98 nnz: 1.01 time: 3.15\n46 loss: 22.91 .0.ablang_pll:-0.49 .1.boltz2.0.target_contact:-4.29 .1.boltz2.1.intra_contact:-2.10 loss: 22.91 nnz: 1.02 time: 3.15\n47 loss: 22.67 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.33 .1.boltz2.1.intra_contact:-2.10 loss: 22.67 nnz: 1.02 time: 2.71\n48 loss: 22.60 .0.ablang_pll:-0.48 .1.boltz2.0.target_contact:-4.31 .1.boltz2.1.intra_contact:-2.10 loss: 22.60 nnz: 1.02 time: 2.85\n49 loss: 22.47 .0.ablang_pll:-0.47 .1.boltz2.0.target_contact:-4.32 .1.boltz2.1.intra_contact:-2.10 loss: 22.47 nnz: 1.02 time: 2.88\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "ef889589aec0c08d2e666f2bf5afb6fb",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "exception",
+          "evalue": "An ancestor raised an exception (KeyboardInterrupt): ",
+          "traceback": []
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Predicting structure...\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    }
+  ]
+}

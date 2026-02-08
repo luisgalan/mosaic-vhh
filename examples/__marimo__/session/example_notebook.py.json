@@ -1,0 +1,409 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.19.4"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "5b279027d40a6d61d20970d72b23bdd8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><strong>Warning</strong></span>\n<ol>\n<li>You'll almost certainly need a GPU or TPU</li>\n<li>Because JAX uses JIT compilation the first execution of a cell may take quite a while</li>\n<li>You might have to run these optimization methods multiple times before you get a reasonable binder</li>\n</ol>\n<h2 id=\"4-if-you-wanted-to-you-could-certainly-find-better-hyperparameters-for-these-examples-for-faster-or-better-optimization\">4. If you wanted to, you could certainly find better hyperparameters for these examples (for faster or better optimization)</h2></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "cfc77597f2f7fe97b379f7fcd292c681",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">First let's define a simple loss function to optimize.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "46983bf869755f6d3031a45c3a4e1d42",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Now we run an optimizer -- in this case an accelerated proximal gradient method -- to get an initial soluton</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "b068be8d0e8d1613ec462fe43be6f46d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">This looks pretty good (usually), but it isn't a single sequence (check out the PSSM above)! We could inverse fold the structure but instead let's try to 'sharpen' the PSSM to get to an extreme point of the probability simplex.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": "80135801be485d5fef39a8967b505670",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Hopefully this still looks pretty good and is now a single sequence!</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "cb34326ce1945d353b2b876c91b75fc2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Okay, that was fun but let's do a something a little more complicated: we'll use AlphaFold2 (instead of Boltz) to design a binder that adheres to a specified fold. <a href=\"https://www.rcsb.org/structure/7S5B\" rel=\"noopener noreferrer\" target=\"_blank\">7S5B</a> is a denovo triple-helix bundle originally designed to bind IL-7r; let's see if we can find a sequence <em>with the same fold</em> that AF thinks will bind to our target instead.</span>\n<span class=\"paragraph\">To do so we'll add two terms to our loss function:</span>\n<ol>\n<li>The log-likelihood of our sequence according to ProteinMPNN applied to the scaffold structure</li>\n<li>Cross-entropy between the predicted distogram of our sequence and the original 7S5B sequence</li>\n</ol>\n<span class=\"paragraph\">We'll also show how easy it is to modify loss terms by clipping these two functionals.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "fc3b2bb7b63870383690c63822a12242",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Let's add a loss term that penalizes cysteines.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "0cefe95580dacb689218f4e30d57b0a7",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Next, we'll predict the scaffold alone using AF2 (we could use the crystal structure instead but this works fine). We'll use the predicted structure in two loss terms:</span>\n<ol>\n<li>Cross entropy between the distograms for the scaffold ground truth sequence and our designed binder</li>\n<li>Inverse folding log probability of our designed binder as predicted by proteinMPNN applied to the scaffold structure</li>\n</ol></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TRpd",
+      "code_hash": "3913bfb7d337ad78bb278ea9e88adc38",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Let's test this out by predicting the complex structure with Boltz and AF2</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "kqZH",
+      "code_hash": "e7976b80f832249f2dac9671568bc590",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">For fun (and to show how easy it is to use different optimization algorithms) let's try polishing this design using gradient-assisted MCMC</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "CcZR",
+      "code_hash": "10d32592b090f304cebc4ca34a000769",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">As a final example let's try optimizing the <em>sum</em> of these loss terms; so we're calling both AF2 and Boltz1 at every iteration. In <code>mosaic</code> this is trivial.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "setup",
+      "code_hash": "f4271010bc8c265df39828c90f3ff842",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "5cdfda6f743819c06b76d22075740eef",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "414ecc385adf066a6f4aa1aa7553ea6c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "913ff51e27e1c6d4c3efc1b6e4200df9",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "75430fd6eda7ba015864f5bf892e1fe6",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "68b2b7551686a13fb85f3b20e52c9dc3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "e1c85a212637375ff9d33289415d57ed",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "8ef5c1bbd4da108b7acb4cff0d626a24",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "3e2905f1cee20fd685d0271c2f2c2280",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "9f0b6cf35a7cbc933b735c51eed2efe0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "97aea1bc6b4444e818470bb135a8393b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "2b019427b90dde2f6662f62bba7e0ef5",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "0b76021538d8b29e8879f13542591289",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": "4daa898ee99cb1369b79e19885ff687f",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TqIu",
+      "code_hash": "a7eb58139da1c057dc98f65aab2c64fa",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "87d4d3037578bf9e72cdc10e2baa0f37",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "36c618d550edb072e14685c2f725cc2b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "10103be7a7f66d63343220121d10808a",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZBYS",
+      "code_hash": "f2b8348b9e00e9856f16cbfe402e6a48",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "1e518f89c57f5a2d60838b5117c43cfa",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "36bbdfb0013f9cab09b52fb830e709ee",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": "f86482dd77939c9a4058c65be9eb9344",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "pHFh",
+      "code_hash": "19234b6d0379370e3a78bf31ab4daac1",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "NCOB",
+      "code_hash": "69b237fb30e5bac956c316e048c90f56",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "aqbW",
+      "code_hash": "7874e4de2d38aaca4787f6f872aff948",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TXez",
+      "code_hash": "c834cb4205b43e1a33339aa9c585584a",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "dNNg",
+      "code_hash": "b6ef65f77de0480e7a7ad474032c7e2d",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "yCnT",
+      "code_hash": "e504f6ef5cf25f5a569afc48e3a11c6e",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "wlCL",
+      "code_hash": "b73c26be9cd2aa838feb887eb66c0bbb",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "wAgl",
+      "code_hash": "472802f2851e74949adea1ce3be3a91c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "rEll",
+      "code_hash": "f1681febcb80666ba2a96fe39e849682",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "dGlV",
+      "code_hash": "f485138d29066b2936bbd571cd694f2c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SdmI",
+      "code_hash": "1b56e723a1aa6ea73b6122cddc9a7697",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lgWD",
+      "code_hash": "983734ecdbfd9040340f306b436c770c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "yOPj",
+      "code_hash": "55bba41ce875646d67e77493af1a5de1",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "fwwy",
+      "code_hash": "28594d5e63958e4cdce0d6637f81c8ff",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "LJZf",
+      "code_hash": "51622df51ea7fead719750d43f76157f",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "urSm",
+      "code_hash": "c8a38cec9e1e5673279ea52c8ea7515a",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "jxvo",
+      "code_hash": "5a2bcc7b785e3a2d191f3a98d03c765e",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "mWxS",
+      "code_hash": "38fa21ea8c21bce56de00ce8bb733fd6",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "YWSi",
+      "code_hash": "c13d28aec5b5b488f2e4edee5597a04c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "zlud",
+      "code_hash": "f858967cf7962a7255446bb7d3fa172b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "tZnO",
+      "code_hash": "c0cc41ce2d6c13393408ddfdb26b2291",
+      "outputs": [],
+      "console": []
+    }
+  ]
+}
