@@ -58,6 +58,9 @@ artifacts = [
     "src/mosaic/proteinmpnn/weights/*",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/mosaic", "vhh"]
+
 [[tool.uv.index]]
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cpu"
@@ -82,4 +85,3 @@ conflicts = [
 ]
 package = true
 override-dependencies = ["scipy==1.15.1", "numpy==2.1"]
-
