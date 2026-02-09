@@ -53,7 +53,8 @@ def _():
 
 @app.cell
 def _(jax, np):
-    RNG_KEY = jax.random.key(np.random.randint(42))
+    # RNG_KEY = jax.random.key(np.random.randint(42))
+    RNG_KEY = jax.random.key(np.random.randint(100))
     return (RNG_KEY,)
 
 
@@ -160,7 +161,8 @@ def _(
     
         class FrameworkCELoss(LossTerm):
             def __call__(self, pssm: Float[Array, "N 20"], key=None):
-                eps = 1e-7
+                # eps = 1e-7
+                eps = 1e-5
                 framework_probs = pssm[framework_positions]
                 framework_probs = jnp.clip(framework_probs, eps, 1.0 - eps)
                 # Sum over 20 AAs (axis=-1), then mean over framework positions
