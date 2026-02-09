@@ -44,6 +44,7 @@ def _():
         jablang,
         jax,
         jnp,
+        mo,
         np,
         pdb_viewer,
         simplex_APGM,
@@ -158,7 +159,7 @@ def _(
         framework_positions = jnp.array([i for i, c in enumerate(masked_framework_sequence) if c != 'X'])
         framework_aas = [TOKENS.index(c) for i, c in enumerate(masked_framework_sequence) if c != 'X']
         framework_targets = jax.nn.one_hot(framework_aas, 20)
-    
+
         class FrameworkCELoss(LossTerm):
             def __call__(self, pssm: Float[Array, "N 20"], key=None):
                 # eps = 1e-7
@@ -168,7 +169,7 @@ def _(
                 # Sum over 20 AAs (axis=-1), then mean over framework positions
                 ce = -jnp.mean(jnp.sum(framework_targets * jnp.log(framework_probs), axis=-1))
                 return ce, {"framework_ce": ce}
-    
+
         return FrameworkCELoss()
 
     ab_log_likelihood = AbLangPseudoLikelihood(
@@ -213,7 +214,6 @@ def _(
         logspace=True,
         max_gradient_norm=1.0,
     )
-
     return (PSSM,)
 
 
@@ -298,10 +298,16 @@ def _(
     log_metrics(final_PSSM, final_features, RNG_KEY, prefix='argmax_')
 
     print("Predicting structure...")
-    _o, _viewer = predict(
+    final_structure, _viewer = predict(
         PSSM, final_features, final_writer
     )
     _viewer
+    return (final_structure,)
+
+
+@app.cell
+def _(final_structure, mo):
+    mo.download(data=final_structure.st.make_pdb_string(), filename="vhh.pdb")
     return
 
 
