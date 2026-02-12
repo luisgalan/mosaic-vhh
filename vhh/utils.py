@@ -2,26 +2,41 @@ from ipymolstar import MolViewSpec
 import molviewspec
 import gemmi
 import base64
+import jax
 import jax.numpy as jnp
 from jaxtyping import Float, Array
 from mosaic.common import TOKENS
+from mosaic.losses.boltz2 import set_binder_sequence
 
-def framework_similarity(masked_framework_seq, pssm: Float[Array, "N 20"]):
-    framework_positions = jnp.array([i for i, c in enumerate(masked_framework_seq) if c != 'X'])
-    framework_aas = jnp.array([TOKENS.index(c) for i, c in enumerate(masked_framework_seq) if c != 'X'])
-    framework_probs = pssm[framework_positions]  # Shape: (num_framework, 20)
-    # Extract probability of correct AA at each position
-    correct_probs = framework_probs[jnp.arange(len(framework_aas)), framework_aas]
-    # Average to get similarity percentage
-    value = jnp.mean(correct_probs) * 100.0
-    return value, {'framework_pct': value}
-
-def sequence_sharpness(pssm: Float[Array, "N 20"]):
-    # Get the probability of the argmax AA at each position
-    max_probs = jnp.max(pssm, axis=-1)
-    # Average over all positions
-    value = jnp.mean(max_probs) * 100.0
-    return value, {'sharpness_pct': value}
+# def framework_similarity(
+#     masked_framework_seq, pssm: Float[Array, "N 20"]
+# ):
+#     framework_positions = jnp.array(
+#         [i for i, c in enumerate(masked_framework_seq) if c != "X"]
+#     )
+#     framework_aas = jnp.array(
+#         [
+#             TOKENS.index(c)
+#             for i, c in enumerate(masked_framework_seq)
+#             if c != "X"
+#         ]
+#     )
+#     framework_probs = pssm[framework_positions]  # Shape: (num_framework, 20)
+#     # Extract probability of correct AA at each position
+#     correct_probs = framework_probs[
+#         jnp.arange(len(framework_aas)), framework_aas
+#     ]
+#     # Average to get similarity percentage
+#     value = jnp.mean(correct_probs) * 100.0
+#     return value, {"framework_pct": value}
+#
+#
+# def sequence_sharpness(pssm: Float[Array, "N 20"]):
+#     # Get the probability of the argmax AA at each position
+#     max_probs = jnp.max(pssm, axis=-1)
+#     # Average over all positions
+#     value = jnp.mean(max_probs) * 100.0
+#     return value, {"sharpness_pct": value}
 
 def pdb_viewer(st: gemmi.Structure, cdr_positions: list[int] | None = None):
     """

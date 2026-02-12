@@ -34,6 +34,7 @@ dependencies = [
     "nvidia-cusolver-cu12==11.7.3.90",
     "molviewspec>=1.8.1",
     "wandb>=0.18.7",
+    "python-dotenv>=1.2.1",
 ]
 
 [dependency-groups]

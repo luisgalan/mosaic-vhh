@@ -11,3 +11,5 @@ wheels/
 
 params/
 wandb/
+.env
+.af3
