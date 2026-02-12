@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import os
 from dotenv import load_dotenv
 import subprocess
@@ -7,6 +8,8 @@ import hashlib
 import random
 import pandas as pd
 import gemmi
+import ipsae
+from vhh.af3.ipsae import IpSAEMetrics, compute_ipsae
 
 load_dotenv()
 
@@ -66,19 +69,31 @@ def get_msa(sequence, chain_id):
     with open(output_file, "r") as f:
         return json.load(f)['sequences'][0]['protein']
 
-def get_fold_output(id):
+@dataclass
+class AF3Output:
+    model: gemmi.cif.Document
+    ranking_scores: pd.DataFrame
+    summary_confidences: dict
+    ipsae_metrics: IpSAEMetrics
+
+def get_fold_output(id) -> AF3Output:
     assert(os.path.exists(FOLD_DIR / id))
 
-    output = {}
-    output['model'] = gemmi.cif.read_file(str(FOLD_DIR / f"{id}/{id}_model.cif"))
-    output['ranking_scores'] = pd.read_csv(FOLD_DIR / f"{id}/{id}_ranking_scores.csv")
-    with open(FOLD_DIR / f"{id}/{id}_summary_confidences.json", "r") as f:
-        output['summary_confidences'] = json.load(f)
+    cif_path = str(FOLD_DIR / f"{id}/{id}_model.cif")
+    ranking_path = str(FOLD_DIR / f"{id}/{id}_ranking_scores.csv")
+    confidences_path = str(FOLD_DIR / f"{id}/{id}_confidences.json")
+    summary_path = str(FOLD_DIR / f"{id}/{id}_summary_confidences.json")
 
-    return output
+    model = gemmi.cif.read_file(cif_path)
+    ranking_scores = pd.read_csv(ranking_path)
+    with open(summary_path) as f:
+        summary_confidences = json.load(f)
+    ipsae_metrics = compute_ipsae(cif_path, confidences_path, summary_path)
+
+    return AF3Output(model, ranking_scores, summary_confidences, ipsae_metrics)
 
 
-def get_fold(binder_sequence, target_sequence, num_seeds=3):
+def get_fold(binder_sequence, target_sequence, num_seeds=3) -> AF3Output:
     id = get_output_id(binder_sequence, target_sequence, num_seeds)
 
     # Check if cached output exists
@@ -126,10 +141,11 @@ def get_fold(binder_sequence, target_sequence, num_seeds=3):
 
 target_sequence = "KTSWVNCSNMIDEIITHLKQPPLPLLDFNNLNGEDQDILMENNLRRPNLEAFNRAVKSLQNASAIESILKNLLPCLPLATAAPTRHPIHIKDGDWNEFRRKLTFYLKTLENA"
 binders = [
-    "YVQLVESGGGLVQPGGSLRLSCAASGDTFRGSRDTCLGWFRQAPGQGLEAVAAIWNDENQEYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCCAWILCSSDRYYWYWQAYWGQGTLVTVS",
+    # "YVQLVESGGGLVQPGGSLRLSCAASGDTFRGSRDTCLGWFRQAPGQGLEAVAAIWNDENQEYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCCAWILCSSDRYYWYWQAYWGQGTLVTVS",
     "YVQLVESGGGLVQPGGSLRLSCAASGVTFRPNTQTSLGWVRQAPGQGLEWVAAITVSKNKEYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCFVLLAESSNSCYWDWLVSWGQGTLVTVS",
-    "QVQLVESGGGLVQPGGSLRLSCAASEAYSRPSAHTNLGWFRQAPGQGLEAVAAIWHDGTYQYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCFRYQFSSSRDLWNDLEHAWGQGTLVTVS",
+    # "QVQLVESGGGLVQPGGSLRLSCAASEAYSRPSAHTNLGWFRQAPGQGLEAVAAIWHDGTYQYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCFRYQFSSSRDLWNDLEHAWGQGTLVTVS",
 ]
 
 for binder in binders:
-    get_fold(binder, target_sequence)
+    fold = get_fold(binder, target_sequence)
+    print(fold)
