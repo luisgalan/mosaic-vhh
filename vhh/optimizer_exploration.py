@@ -32,11 +32,12 @@ def _():
     import molviewspec
     from mosaic.losses.ablang import AbLangPseudoLikelihood
     import base64
-    from vhh.utils import pdb_viewer
+    from vhh.utils import pdb_viewer, save_run_metadata
     from vhh.metrics import calculate_metrics, sequence_sharpness
     import optax
     import equinox as eqx
     import wandb
+    import os
 
     return (
         AbLangPseudoLikelihood,
@@ -57,7 +58,9 @@ def _():
         jnp,
         np,
         optax,
+        os,
         pdb_viewer,
+        save_run_metadata,
         sequence_sharpness,
         sp,
         wandb,
@@ -395,7 +398,9 @@ def _(
     jax,
     masked_framework_seq,
     np,
+    os,
     predict,
+    save_run_metadata,
     sequence_sharpness,
     target_sequence,
     wandb,
@@ -407,7 +412,8 @@ def _(
     final_PSSM = jax.nn.one_hot(PSSM.argmax(-1), 20)
     final_seq = "".join(TOKENS[i] for i in PSSM.argmax(-1))
     print(final_seq)
-    print(f"Sharpness: {float(sequence_sharpness(pssm=PSSM)[0]):.2f}%")
+    pssm_sharpness = float(sequence_sharpness(pssm=PSSM)[0])
+    print(f"Sharpness: {pssm_sharpness:.2f}%")
 
     # Repredict
     # final_features, final_writer = fold_features, fold_writer
@@ -440,6 +446,18 @@ def _(
     print("Predicting structure...")
     _o, _viewer = predict(PSSM, final_features, final_writer, key=EVAL_RNG_KEY)
 
+
+    save_run_metadata(
+        output_dir=os.environ.get("RESULTS_DIR", "notebook_results"),
+        notebook_path=__file__,
+        binder_sequence=final_seq,
+        target_sequence=target_sequence,
+        wandb_run=wandb_run,
+        metadata={
+            "pssm_sharpness": pssm_sharpness,
+            "metrics": {k: float(v) for k, v in metrics.items()},
+        },
+    )
     wandb_run.finish()
 
     _viewer

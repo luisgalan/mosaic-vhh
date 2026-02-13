@@ -7,36 +7,11 @@ import jax.numpy as jnp
 from jaxtyping import Float, Array
 from mosaic.common import TOKENS
 from mosaic.losses.boltz2 import set_binder_sequence
-
-# def framework_similarity(
-#     masked_framework_seq, pssm: Float[Array, "N 20"]
-# ):
-#     framework_positions = jnp.array(
-#         [i for i, c in enumerate(masked_framework_seq) if c != "X"]
-#     )
-#     framework_aas = jnp.array(
-#         [
-#             TOKENS.index(c)
-#             for i, c in enumerate(masked_framework_seq)
-#             if c != "X"
-#         ]
-#     )
-#     framework_probs = pssm[framework_positions]  # Shape: (num_framework, 20)
-#     # Extract probability of correct AA at each position
-#     correct_probs = framework_probs[
-#         jnp.arange(len(framework_aas)), framework_aas
-#     ]
-#     # Average to get similarity percentage
-#     value = jnp.mean(correct_probs) * 100.0
-#     return value, {"framework_pct": value}
-#
-#
-# def sequence_sharpness(pssm: Float[Array, "N 20"]):
-#     # Get the probability of the argmax AA at each position
-#     max_probs = jnp.max(pssm, axis=-1)
-#     # Average over all positions
-#     value = jnp.mean(max_probs) * 100.0
-#     return value, {"sharpness_pct": value}
+import time
+import os
+import json
+import wandb
+import hashlib
 
 def pdb_viewer(st: gemmi.Structure, cdr_positions: list[int] | None = None):
     """
@@ -73,3 +48,42 @@ def pdb_viewer(st: gemmi.Structure, cdr_positions: list[int] | None = None):
     viewer.msvj_data = builder.get_state().dumps()
 
     return viewer
+
+def save_run_metadata(output_dir: str, binder_sequence: str, target_sequence: str, notebook_path: str | None=None, wandb_run=None, metadata: dict = {}):
+    # Get wandb run metadata
+    wandb_run_id = wandb_run.id if wandb_run else None
+    wandb_run_url = wandb_run.url if wandb_run else None
+    wandb_run_logs = None
+    if wandb_run:
+        try:
+            api_run = wandb.Api().run(f"{wandb_run.entity}/{wandb_run.project}/{wandb_run.id}")
+            wandb_run_logs = api_run.history().to_dict(orient="records")
+        except Exception as e:
+            print(f"Failed to fetch wandb run logs: {e}")
+
+    notebook_hash = None
+    if notebook_path:
+        try:
+            with open(notebook_path, 'rb') as f:
+                notebook_hash = hashlib.sha256(f.read()).hexdigest()
+        except Exception as e:
+            print(f"Failed to compute notebook hash: {e}")
+
+
+    # Save json output
+    filename = time.strftime("%m%d-%H%M%S") + ".json"
+    output = {
+        'timestamp': time.time(),
+        'notebook_path': notebook_path,
+        'notebook_hash': notebook_hash,
+        'binder_sequence': binder_sequence,
+        'target_sequence': target_sequence,
+        'metadata': metadata,
+        'wandb_run_id': wandb_run_id,
+        'wandb_run_url': wandb_run_url,
+        'wandb_run_logs': wandb_run_logs,
+    }
+    print(f"Saving run metadata to {os.path.join(output_dir, filename)}...")
+    os.makedirs(output_dir, exist_ok=True)
+    with open(os.path.join(output_dir, filename), 'w') as f:
+        json.dump(output, f, indent=4)

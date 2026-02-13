@@ -19,6 +19,7 @@ def _():
     import gemmi
     from vhh.utils import pdb_viewer
     from vhh.metrics import calculate_metrics
+    import vhh.af3.af3
     import os
 
     return Protenix2025, TOKENS, TargetChain, gemmi, jax, np, os, pdb_viewer
