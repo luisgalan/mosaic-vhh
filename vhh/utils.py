@@ -71,7 +71,7 @@ def save_run_metadata(output_dir: str, binder_sequence: str, target_sequence: st
 
 
     # Save json output
-    filename = time.strftime("%m%d-%H%M%S") + ".json"
+    filename = time.strftime("%m-%d_%H-%M-%S") + ".json"
     output = {
         'timestamp': time.time(),
         'notebook_path': notebook_path,

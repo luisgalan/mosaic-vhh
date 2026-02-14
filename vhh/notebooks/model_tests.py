@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.19.9"
+__generated_with = "0.19.11"
 app = marimo.App(width="medium")
 
 
@@ -23,8 +23,11 @@ def _():
     from mosaic.losses.transformations import SoftClip
     from mosaic.structure_prediction import TargetChain
     from mosaic.models.af2 import AlphaFold2
-    from mosaic.losses.protein_mpnn import InverseFoldingSequenceRecovery
-    from mosaic.proteinmpnn.mpnn import ProteinMPNN
+    from mosaic.losses.protein_mpnn import (
+        InverseFoldingSequenceRecovery,
+        ProteinMPNNLoss,
+    )
+    from mosaic.proteinmpnn.mpnn import load_abmpnn
     import ablang
     import jablang
     import gemmi
@@ -42,11 +45,9 @@ def _():
     return (
         AbLangPseudoLikelihood,
         Array,
-        Boltz2,
-        Boltz2Loss,
         Float,
         LossTerm,
-        ProteinMPNN,
+        Protenix2025,
         TOKENS,
         TargetChain,
         ablang,
@@ -56,12 +57,14 @@ def _():
         jablang,
         jax,
         jnp,
+        load_abmpnn,
         np,
         optax,
         os,
         pdb_viewer,
         save_run_metadata,
         sequence_sharpness,
+        simplex_APGM,
         sp,
         wandb,
     )
@@ -69,26 +72,19 @@ def _():
 
 @app.cell
 def _(jax, np):
-    # RNG_KEY = jax.random.key(np.random.randint(42))
-    RNG_KEY = jax.random.key(np.random.randint(100))
+    RNG_KEY = jax.random.key(np.random.randint(100000))
     return (RNG_KEY,)
 
 
 @app.cell
 def _(gemmi, np):
     target_structure = gemmi.read_structure("il3.pdb")
-    target_sequence = gemmi.one_letter_code(
-        [r.name for r in target_structure[0][0]]
-    )
+    target_sequence = gemmi.one_letter_code([r.name for r in target_structure[0][0]])
 
     # Framework sequence from protenij_vhh example - this is the same scaffold germinal uses
     masked_framework_seq = "QVQLVESGGGLVQPGGSLRLSCAASXXXXXXXXXXXLGWFRQAPGQGLEAVAAXXXXXXXXYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCXXXXXXXXXXXXXXXXXXWGQGTLVTVS"
-    cdr_positions = np.array(
-        list([i for i, aa in enumerate(masked_framework_seq) if aa == "X"])
-    )
-    framework_positions = np.array(
-        list([i for i, aa in enumerate(masked_framework_seq) if aa != "X"])
-    )
+    cdr_positions = np.array(list([i for i, aa in enumerate(masked_framework_seq) if aa == "X"]))
+    framework_positions = np.array(list([i for i, aa in enumerate(masked_framework_seq) if aa != "X"]))
 
     binder_length = len(masked_framework_seq)
     cdr_length = len(cdr_positions)
@@ -102,9 +98,10 @@ def _(gemmi, np):
 
 
 @app.cell
-def _(Boltz2):
-    fold_model = Boltz2()
+def _(Protenix2025):
+    # fold_model = Boltz2()
     # fold_model = AlphaFold2()
+    fold_model = Protenix2025()
     return (fold_model,)
 
 
@@ -123,9 +120,7 @@ def _(
     target_sequence,
 ):
     def predict(sequence, features, writer, key):
-        pred = fold_model.predict(
-            PSSM=sequence, features=features, writer=writer, key=key
-        )
+        pred = fold_model.predict(PSSM=sequence, features=features, writer=writer, key=key)
         return pred, pdb_viewer(pred.st, cdr_positions=cdr_positions.tolist())
 
 
@@ -141,9 +136,7 @@ def _(
     #     ]
     # )
 
-    init_PSSM = jax.nn.one_hot(
-        [0 if c == "X" else TOKENS.index(c) for c in masked_framework_seq], 20
-    )
+    init_PSSM = jax.nn.one_hot([0 if c == "X" else TOKENS.index(c) for c in masked_framework_seq], 20)
     init_PSSM = init_PSSM.at[cdr_positions].set(
         0.5
         * jax.random.gumbel(
@@ -158,8 +151,8 @@ def _(
 
 
 @app.cell
-def _(ProteinMPNN, ablang):
-    mpnn = ProteinMPNN.from_pretrained()
+def _(ablang, load_abmpnn):
+    mpnn = load_abmpnn(0.05)
     heavy_ablang = ablang.pretrained("heavy")
     heavy_ablang.freeze()
     return (heavy_ablang,)
@@ -169,7 +162,6 @@ def _(ProteinMPNN, ablang):
 def _(
     AbLangPseudoLikelihood,
     Array,
-    Boltz2Loss,
     Float,
     LossTerm,
     TOKENS,
@@ -188,11 +180,7 @@ def _(
         framework_positions = jnp.array(
             [i for i, c in enumerate(masked_framework_sequence) if c != "X"]
         )
-        framework_aas = [
-            TOKENS.index(c)
-            for i, c in enumerate(masked_framework_sequence)
-            if c != "X"
-        ]
+        framework_aas = [TOKENS.index(c) for i, c in enumerate(masked_framework_sequence) if c != "X"]
         framework_targets = jax.nn.one_hot(framework_aas, 20)
 
         class FrameworkCELoss(LossTerm):
@@ -202,9 +190,7 @@ def _(
                 framework_probs = pssm[framework_positions]
                 framework_probs = jnp.clip(framework_probs, eps, 1.0 - eps)
                 # Sum over 20 AAs (axis=-1), then mean over framework positions
-                ce = -jnp.mean(
-                    jnp.sum(framework_targets * jnp.log(framework_probs), axis=-1)
-                )
+                ce = -jnp.mean(jnp.sum(framework_targets * jnp.log(framework_probs), axis=-1))
                 return ce, {"framework_ce": ce}
 
         return FrameworkCELoss()
@@ -224,7 +210,9 @@ def _(
                 ]  # encourage binding with the CDRs rather than the framework.
             )
         )
-        # + 0.5 * InverseFoldingSequenceRecovery(mpnn, temp=jnp.array(0.001))
+        # + sp.WithinBinderContact()
+        # + 10.0 * InverseFoldingSequenceRecovery(mpnn, temp=jnp.array(0.01))
+        # + 2.0 * ProteinMPNNLoss(mpnn, num_samples=3)
         + 0.05 * sp.TargetBinderPAE()
         + 0.05 * sp.BinderTargetPAE()
         + 0.025 * sp.IPTMLoss()
@@ -233,30 +221,44 @@ def _(
         + 0.1 * sp.PLDDTLoss()
     )
 
-    structure_loss = Boltz2Loss(
-        joltz2=fold_model.model,
-        features=fold_features,
-        recycling_steps=1,
-        sampling_steps=25,
-        # sampling_steps=17,
-        loss=sp_loss,
-        deterministic=False,
-    )
-
-    # structure_loss = fold_model.build_loss(
-    #     loss=sp_loss,
+    # structure_loss = Boltz2Loss(
+    #     joltz2=fold_model.model,
     #     features=fold_features,
+    #     recycling_steps=1,
+    #     sampling_steps=25,
+    #     # sampling_steps=17,
+    #     loss=sp_loss,
+    #     deterministic=False,
     # )
+
+    structure_loss = fold_model.build_loss(
+        loss=sp_loss,
+        features=fold_features,
+        sampling_steps=25,
+    )
 
     framework_loss = create_framework_loss(masked_framework_seq)
 
-    loss = ab_log_likelihood + structure_loss + framework_loss
+    loss = structure_loss + 20.0 * framework_loss
+    # loss = ab_log_likelihood + structure_loss + 20.0 * framework_loss
     # loss = 0.2 * ab_log_likelihood + structure_loss + framework_loss
     return (loss,)
 
 
 @app.cell
-def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
+def _(
+    Array,
+    Float,
+    eqx,
+    init_PSSM,
+    jax,
+    jnp,
+    loss,
+    np,
+    optax,
+    simplex_APGM,
+    wandb,
+):
     @eqx.filter_jit
     def _compute_loss_fn(loss_function, logits, key, eps, entropy_weight):
         probs = jax.nn.softmax(logits)
@@ -286,9 +288,7 @@ def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
 
         if lr_end is not None:
             # Linear decay schedule
-            schedule = optax.linear_schedule(
-                init_value=lr, end_value=lr_end, transition_steps=n_steps
-            )
+            schedule = optax.linear_schedule(init_value=lr, end_value=lr_end, transition_steps=n_steps)
         else:
             # Constant lr
             schedule = lr
@@ -310,17 +310,13 @@ def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
             key, noise_key, loss_key = jax.random.split(key, 3)
 
             temp = initial_temp * (final_temp / initial_temp) ** (i / n_steps)
-            noisy_logits = logits + temp * jax.random.normal(
-                noise_key, shape=logits.shape
-            )
+            noisy_logits = logits + temp * jax.random.normal(noise_key, shape=logits.shape)
 
             # cur_entropy_weight = jnp.array((i / n_steps) * entropy_weight)
             if i < entropy_warmup_steps:
                 w_ent = jnp.array(0.0)
             else:
-                progress = (i - entropy_warmup_steps) / (
-                    n_steps - entropy_warmup_steps
-                )
+                progress = (i - entropy_warmup_steps) / (n_steps - entropy_warmup_steps)
                 w_ent = entropy_weight * (1 - jnp.cos(jnp.pi * progress)) / 2
 
             (value, (loss, seq_entropy, aux)), grads = eqx.filter_value_and_grad(
@@ -336,9 +332,7 @@ def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
 
             for k, v in jax.tree_util.tree_leaves_with_path(aux):
                 name = jax.tree_util.keystr(k, simple=True, separator=".")
-                dict_keys = [
-                    key.key for key in k if isinstance(key, jax.tree_util.DictKey)
-                ]
+                dict_keys = [key.key for key in k if isinstance(key, jax.tree_util.DictKey)]
                 name = ".".join(dict_keys)
                 metrics[name] = v
 
@@ -365,7 +359,7 @@ def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
 
             key = jax.random.fold_in(key, 0)
 
-        return jax.nn.softmax(logits), jax.nn.softmax(best_logits)
+        return jax.nn.softmax(best_logits), float(best_total_loss)
 
 
     wandb_run = wandb.init(
@@ -374,16 +368,27 @@ def _(Array, Float, eqx, init_PSSM, jax, jnp, loss, np, optax, wandb):
     )
     wandb_run.log_code("./vhh")
 
-    _, PSSM = adam_logit_optimizer(
+    # PSSM, final_loss = adam_logit_optimizer(
+    #     loss_function=loss,
+    #     x=init_PSSM,
+    #     n_steps=75,
+    #     lr=5.0,
+    #     entropy_weight=20.0,
+    #     entropy_warmup_steps=30,
+    #     clip_grads=1.0,
+    #     # clip_grads=0.2,
+    #     wandb_run=wandb_run,
+    # )
+    _, PSSM = simplex_APGM(
         loss_function=loss,
         x=init_PSSM,
-        n_steps=75,
-        lr=1.0,
-        entropy_weight=20.0,
-        entropy_warmup_steps=30,
-        # clip_grads=1.0,
-        clip_grads=0.2,
-        wandb_run=wandb_run,
+        n_steps=50,
+        stepsize=1.5 * np.sqrt(init_PSSM.shape[0]),
+        momentum=0.2,
+        scale=1.00,
+        serial_evaluation=False,
+        logspace=True,
+        max_gradient_norm=1.0,
     )
     return PSSM, wandb_run
 
@@ -394,6 +399,7 @@ def _(
     TOKENS,
     TargetChain,
     calculate_metrics,
+    final_loss,
     fold_model,
     jax,
     masked_framework_seq,
@@ -406,27 +412,31 @@ def _(
     wandb,
     wandb_run,
 ):
-    EVAL_RNG_KEY = jax.random.key(np.random.randint(34726893745))
+    from vhh.metrics import framework_similarity
+
+    EVAL_RNG_KEY = jax.random.key(np.random.randint(100000))
 
     # Compute final sequence
     final_PSSM = jax.nn.one_hot(PSSM.argmax(-1), 20)
     final_seq = "".join(TOKENS[i] for i in PSSM.argmax(-1))
     print(final_seq)
-    pssm_sharpness = float(sequence_sharpness(pssm=PSSM)[0])
+
+    pssm_sharpness = float(sequence_sharpness(pssm=PSSM))
     print(f"Sharpness: {pssm_sharpness:.2f}%")
+    seq_framework_similarity = float(framework_similarity(masked_framework_seq, PSSM))
+    print(f"Framework similarity: {seq_framework_similarity:.2f}%")
 
     # Repredict
     # final_features, final_writer = fold_features, fold_writer
     final_features, final_writer = fold_model.target_only_features(
         chains=[
             TargetChain(sequence=final_seq, use_msa=False),
-            # TargetChain(sequence=final_seq, use_msa=True),
-            TargetChain(sequence=target_sequence, use_msa=True),
+            # TargetChain(sequence=target_sequence, use_msa=True),
+            TargetChain(sequence=target_sequence, use_msa=False),
         ]
     )
 
     metrics = calculate_metrics(
-        masked_framework_seq,
         final_PSSM,
         fold_model,
         final_features,
@@ -441,20 +451,22 @@ def _(
             line += f" (target: {targets[k]})"
         print(line)
 
-    wandb.log({f"argmax_{k}": v for k, v in metrics.items()})
+    wandb.log({f"{k}": v for k, v in metrics.items()})
 
     print("Predicting structure...")
     _o, _viewer = predict(PSSM, final_features, final_writer, key=EVAL_RNG_KEY)
 
 
     save_run_metadata(
-        output_dir=os.environ.get("RESULTS_DIR", "notebook_results"),
+        output_dir=os.environ.get("RESULTS_DIR", "results/unnamed"),
         notebook_path=__file__,
         binder_sequence=final_seq,
         target_sequence=target_sequence,
         wandb_run=wandb_run,
         metadata={
+            "final_loss": final_loss,
             "pssm_sharpness": pssm_sharpness,
+            "framework_similarity": seq_framework_similarity,
             "metrics": {k: float(v) for k, v in metrics.items()},
         },
     )

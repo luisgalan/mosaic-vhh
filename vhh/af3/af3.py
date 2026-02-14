@@ -82,7 +82,14 @@ class AF3Output:
 
 def _get_fold_output(output_id) -> AF3Output:
     cif_path = str(FOLD_DIR / f"{output_id}/{output_id}_model.cif")
-    ranking_path = str(FOLD_DIR / f"{output_id}/{output_id}_ranking_scores.csv")
+    # AF3 version may output ranking_scores.csv as either "{output_id}_ranking_scores.csv" or "ranking_scores.csv"
+    ranking_candidates = [
+        FOLD_DIR / f"{output_id}/{output_id}_ranking_scores.csv",
+        FOLD_DIR / f"{output_id}/ranking_scores.csv",
+    ]
+    ranking_path = next((str(p) for p in ranking_candidates if p.exists()), None)
+    if ranking_path is None:
+        raise FileNotFoundError(f"Could not find ranking_scores.csv in {FOLD_DIR / output_id}")
     confidences_path = str(FOLD_DIR / f"{output_id}/{output_id}_confidences.json")
     summary_path = str(FOLD_DIR / f"{output_id}/{output_id}_summary_confidences.json")
 
@@ -115,10 +122,11 @@ def _archive_unused_fold_files(output_id):
     if archive_path.exists():
         return
 
-    # Files to keep
+    # Files to keep (ranking_scores may have either naming convention)
     keep_files = {
         f"{output_id}_model.cif",
         f"{output_id}_ranking_scores.csv",
+        "ranking_scores.csv",
         f"{output_id}_confidences.json",
         f"{output_id}_summary_confidences.json",
     }
@@ -173,9 +181,9 @@ def fold(binder_sequence, target_sequence, num_seeds=3, require_cached=False) ->
         return output
     except Exception as e:
         if require_cached:
-            raise FileNotFoundError(f"No cached fold output found for id {output_id}")
+            raise FileNotFoundError(f"No cached fold output found at {FOLD_DIR / output_id}")
         else:
-            print(f"No cached fold output found for id {output_id}, running AF3 inference...")
+            print(f"No cached fold output found at {FOLD_DIR / output_id}, running AF3 inference...")
 
 
     target_msa = _get_or_compute_msa(target_sequence, chain_id="B")

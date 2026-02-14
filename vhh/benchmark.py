@@ -4,8 +4,8 @@ import os
 from vhh.af3 import af3
 import json
 
-NOTEBOOK = "vhh/optimizer_exploration.py"
-RESULTS_DIR = "results1"
+NOTEBOOK = "vhh/notebooks/optimizer_exploration.py"
+RESULTS_DIR = "results/abmpnn_test6"
 
 af3_computed_runs = set()
 os.makedirs(RESULTS_DIR, exist_ok=True)

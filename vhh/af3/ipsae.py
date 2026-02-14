@@ -138,7 +138,7 @@ def compute_ipsae(
         summary_json_path: Path to AF3 summary_confidences JSON (for chain-pair ipTM).
             If None, attempts to infer from pae_json_path.
         pae_cutoff: PAE cutoff for ipSAE calculation (default 10).
-        dist_cutoff: Distance cutoff for interface residue counting (default 15).
+        dist_cutoff: Distance cutoff for interface residue counting (default 10).
 
     Returns:
         IpSAEResult with asymmetric and max chain-pair metrics.

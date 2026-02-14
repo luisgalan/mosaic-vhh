@@ -5,11 +5,14 @@ build/
 dist/
 wheels/
 *.egg-info
+__marimo__/
 
 # Virtual environments
 .venv
 
 params/
 wandb/
+results/
+pdbs/
 .env
 .af3
